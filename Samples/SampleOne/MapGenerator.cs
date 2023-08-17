@@ -354,8 +354,8 @@ namespace Nashet.Map.Examples
 				var height = 130;
 				var width = 150 + Rand.Get.Next(30);
 
-				height = 230;
-				width = 250 + Rand.Get.Next(60);
+				//height = 230;
+				//width = 250 + Rand.Get.Next(60);
 
 				//height = 430;
 				//width = 450 + Rand.Get.Next(60);
