@@ -14,6 +14,7 @@ namespace Nashet.Map.Examples
 	public class MapGenerator : MonoBehaviour
 	{
 		public bool IsReady { get; private set; }
+
 		[SerializeField] Material provinceShoreMaterial;
 		[SerializeField] Material defaultProvinceBorderMaterial;
 		[SerializeField] Material riverMaterial;
@@ -52,7 +53,7 @@ namespace Nashet.Map.Examples
 
 			SetNeighbors();
 
-			AddMountains();
+			AddImpassableBorders();
 			AddRivers();
 
 			SetPatchFinding(meshes);
@@ -104,7 +105,7 @@ namespace Nashet.Map.Examples
 			}
 		}
 
-		public static void GiveExtraProvinces()
+		private static void GiveExtraProvinces()
 		{
 			var howMuchGive = 4;
 			for (int i = 0; i < howMuchGive; i++)
@@ -191,7 +192,7 @@ namespace Nashet.Map.Examples
 			}
 		}
 
-		private void AddMountains()
+		private void AddImpassableBorders()
 		{
 			foreach (var item in Province.AllProvinces.Values)
 			{
@@ -213,7 +214,6 @@ namespace Nashet.Map.Examples
 				var name = CountryNameGenerator.generateCountryName();
 				var color = ColorExtensions.getRandomColor();
 				var country = new Country(color, name, defaultCountryBorderMaterial);
-				//countriesLookup.Add(world.PackEntity(entity));
 				var random = Random.Range(0, Province.AllProvinces.Count - 1);
 				var capital = Province.AllProvinces.ElementAt(random);
 				var meshCapitalText = MapTextLabel.CreateMapTextLabel(r3DCountryTextPrefab, capital.Value.Position,
@@ -266,7 +266,7 @@ namespace Nashet.Map.Examples
 
 		private void AddRiverBorder(Province beach1, Province beach2)
 		{
-			var logRivers = true;
+			var logRivers = false;
 			if (beach1.Terrain == Province.TerrainTypes.Mountains && beach2.Terrain == Province.TerrainTypes.Mountains)
 			{
 				if (logRivers)
@@ -319,8 +319,6 @@ namespace Nashet.Map.Examples
 			}
 			if (logRivers)
 				Debug.Log($"{beach1}, {beach2}");
-
-			//meshes[beach1.Id][beach2.Id]
 
 			beach1.AddRiverBorder(beach2, riverMaterial);
 			beach2.AddRiverBorder(beach1, riverMaterial);

@@ -9,3 +9,9 @@
 - map clicks handler
 - patch finder
 - example with rivers and country borders
+
+## [0.1.2] - 2023-08-18
+
+### Added
+
+- province can suport any materials, for example, stripes material
