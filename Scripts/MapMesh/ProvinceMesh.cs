@@ -51,7 +51,7 @@ namespace Nashet.MapMeshes
 			landMesh.Optimize();
 			landMesh.UploadMeshData(true);
 
-			Position = setProvinceCenter(meshStructure);// I can use mesh.bounds.center, but it will center off a little bit
+			Position = SetProvinceCenter(meshStructure);// I can use mesh.bounds.center, but it will center off a little bit
 
 
 			MeshCollider groundMeshCollider = GameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
@@ -61,8 +61,12 @@ namespace Nashet.MapMeshes
 
 			meshRenderer.material.color = provinceColor;
 
+			CreateBorderMeshes(neighborBorders, defaultBorderMaterial);
+			lookUp.Add(ID, this);
+		}
 
-			//making meshes for border
+		private void CreateBorderMeshes(Dictionary<int, MeshStructure> neighborBorders, Material defaultBorderMaterial)
+		{			
 			foreach (var border in neighborBorders)
 			{
 				var neighbor = border.Key;
@@ -89,7 +93,6 @@ namespace Nashet.MapMeshes
 					bordersMeshes.Add(neighbor, meshRenderer);
 				}
 			}
-			lookUp.Add(ID, this);
 		}
 
 		public void SetColor(Color color)
@@ -106,7 +109,7 @@ namespace Nashet.MapMeshes
 			bordersMeshes[id].material = material;
 		}
 
-		private static Vector3 setProvinceCenter(MeshStructure meshStructure)
+		private static Vector3 SetProvinceCenter(MeshStructure meshStructure)
 		{
 			Vector3 accu = new Vector3(0, 0, 0);
 			foreach (var c in meshStructure.getVertices())
