@@ -11,3 +11,14 @@ Another example is https://github.com/Nashet/MapNECS.git.
 Meshes are not optimized. Thought, you can use vertex shader for really voluminous mountains.
 
 ![Example Image](https://i.imgur.com/EhMcrCP.png)
+
+# Installation
+## As unity module
+This repository can be installed as unity module directly from git url. In this way new line should be added to Packages/manifest.json:
+
+"com.nashet.map": "https://github.com/Nashet/NashetMap.git",
+
+By default last released version will be used. If you need trunk / developing version then develop name of branch should be added after hash:
+
+"com.nashet.map": "https://github.com/Nashet/NashetMap.git#develop",
+
