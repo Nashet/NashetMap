@@ -23,7 +23,7 @@ namespace Nashet.MapMeshes
 
 
 		public ProvinceMesh(int ID, MeshStructure meshStructure, Dictionary<int, MeshStructure> neighborBorders,
-			Color provinceColor, Transform parent, Material defaultBorderMaterial, string name = "", Material material = null)
+			Color provinceColor, Transform parent, Material defaultBorderMaterial, Material material, string name = "")
 		{
 			this.ID = ID;
 			defaultMaterial = material;
@@ -57,9 +57,9 @@ namespace Nashet.MapMeshes
 			MeshCollider groundMeshCollider = GameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
 			groundMeshCollider.sharedMesh = MeshFilter.mesh;
 
-			meshRenderer.material = material;
+			meshRenderer.sharedMaterial = material;
 
-			meshRenderer.material.color = provinceColor;
+			meshRenderer.sharedMaterial.color = provinceColor;
 
 			CreateBorderMeshes(neighborBorders, defaultBorderMaterial);
 			lookUp.Add(ID, this);
@@ -97,12 +97,12 @@ namespace Nashet.MapMeshes
 
 		public void SetColor(Color color)
 		{
-			if (meshRenderer.material != defaultMaterial)
-				meshRenderer.material = defaultMaterial;
-			meshRenderer.material.color = color;
+			if (meshRenderer.sharedMaterial != defaultMaterial)
+				meshRenderer.sharedMaterial = defaultMaterial;
+			meshRenderer.sharedMaterial.color = color;
 		}
 
-		public void SetMaterial(Material material) => meshRenderer.material = material;
+		public void SetMaterial(Material material) => meshRenderer.sharedMaterial = material;
 
 		public void SetBorderMaterial(int id, Material material)
 		{

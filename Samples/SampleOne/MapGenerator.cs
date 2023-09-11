@@ -159,7 +159,8 @@ namespace Nashet.Map.Examples
 				var id = colorId.ToInt();
 				var meshStructure = grid.getMesh(id, out var borderMeshes);
 				var provinceMesh = new ProvinceMesh(id, meshStructure, borderMeshes, Color.yellow,
-					this.transform, provinceShoreMaterial, name);
+					this.transform, provinceShoreMaterial,
+					new Material(Shader.Find("Standard")), name);
 
 				provinceMesh.SetMaterial(new Material(Shader.Find("Standard")));
 
