@@ -48,9 +48,7 @@ namespace Nashet.MapMeshes
 			landMesh.RecalculateNormals();
 			landMesh.RecalculateBounds();
 			landMesh.name = ID.ToString();
-			landMesh.Optimize();
-			landMesh.UploadMeshData(true);
-
+			
 			Position = SetProvinceCenter(meshStructure);// I can use mesh.bounds.center, but it will center off a little bit
 
 
@@ -63,6 +61,9 @@ namespace Nashet.MapMeshes
 
 			CreateBorderMeshes(neighborBorders, defaultBorderMaterial);
 			lookUp.Add(ID, this);
+
+			landMesh.Optimize();
+			landMesh.UploadMeshData(true);
 		}
 
 		private void CreateBorderMeshes(Dictionary<int, MeshStructure> neighborBorders, Material defaultBorderMaterial)
