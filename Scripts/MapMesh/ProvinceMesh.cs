@@ -43,6 +43,8 @@ namespace Nashet.MapMeshes
 
 			landMesh.vertices = meshStructure.getVertices().ToArray();
 			landMesh.triangles = meshStructure.getTriangles().ToArray();
+
+			// next line causes out of memory error in web GL
 			SetUV(landMesh); // dont use getUVmap()
 
 			landMesh.RecalculateNormals();

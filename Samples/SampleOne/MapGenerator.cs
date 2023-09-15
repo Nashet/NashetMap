@@ -37,6 +37,7 @@ namespace Nashet.Map.Examples
 		private void Start()
 		{
 			GenerateWorld();
+			IsReady = true;
 		}
 
 		public Rect GenerateWorld()
