@@ -13,8 +13,15 @@ namespace Nashet.GameplayView
 		[SerializeField] private LineRenderer pathRenderer;
 		[SerializeField] private GameObject body;
 
-		private const float enemyDirectionScale = 0.6f;
+		public bool IsSelected => selectionPart.activeSelf;
+
+		public bool HasPath => path != null && path.Count > 0;
 		public int ProvinceId { get; private set; }
+
+		private const float enemyDirectionScale = 0.6f;
+
+		private int movementProgress;
+		private List<Node> path;
 
 		internal void Initialize(Vector3 position, int provinceID, Sprite sprite)
 		{
@@ -40,8 +47,6 @@ namespace Nashet.GameplayView
 			selectionPart.SetActive(false);
 		}
 
-		public bool IsSelected => selectionPart.activeSelf;
-
 		public Collider GetCollider()
 		{
 			return body.GetComponent<Collider>();
@@ -49,6 +54,7 @@ namespace Nashet.GameplayView
 
 		public void SetPath(List<Node> path)
 		{
+			this.path = path;
 			if (path == null || path.Count == 0)
 			{
 				StopMovement();
@@ -100,6 +106,19 @@ namespace Nashet.GameplayView
 
 			this.transform.eulerAngles = new Vector3(0f, 0f, 0f);
 			movementDirection.enabled = false;
+		}
+
+		internal void Move()
+		{
+			movementProgress += 1;
+			if (movementProgress > 10)
+			{
+				movementProgress = 0;
+				var nextPosition = path[0].Position;
+				transform.position = new Vector3(nextPosition.x, nextPosition.y, transform.position.z);
+				path.RemoveAt(0);
+				SetPath(path);
+			}
 		}
 	}
 }

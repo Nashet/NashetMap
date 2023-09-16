@@ -18,6 +18,7 @@ namespace Nashet.Map.Examples
 
 		private MonoObjectPool<UnitView> unitPool;
 		private Dictionary<Collider, UnitView> unitsLookup = new();
+		private float unitMovementRate = 0.15f;
 
 		private IEnumerator Start()
 		{
@@ -37,16 +38,28 @@ namespace Nashet.Map.Examples
 			provinceSelection.ProvinceSelected += ProvinceSelectedHandler;
 
 			CreateUnitsForTest();
+			InvokeRepeating(nameof(MoveUnits), 0f, unitMovementRate);
+		}
+
+		private void MoveUnits()
+		{
+			foreach (var unit in unitsLookup.Values)
+			{
+				if (unit.HasPath)
+				{
+					unit.Move();
+				}
+			}
 		}
 
 		private void ProvinceSelectedHandler(Province targetProvince)
 		{
-            if (targetProvince == null)
-            {
+			if (targetProvince == null)
+			{
 				return;
-            }
+			}
 
-            foreach (var unit in unitsLookup.Values)
+			foreach (var unit in unitsLookup.Values)
 			{
 				if (!unit.IsSelected)
 					continue;
