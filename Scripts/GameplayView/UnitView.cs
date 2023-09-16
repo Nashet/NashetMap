@@ -31,6 +31,8 @@ namespace Nashet.GameplayView
 			gameObject.transform.position = position;
 			Deselect();
 			movementDirection.enabled = false;
+			movementProgress = 0;
+			path = null;
 		}
 		private void SetFlag(Sprite sprite)
 		{
@@ -55,6 +57,7 @@ namespace Nashet.GameplayView
 		public void SetPath(List<Node> path)
 		{
 			this.path = path;
+			movementProgress = 0;
 			if (path == null || path.Count == 0)
 			{
 				StopMovement();
@@ -111,14 +114,20 @@ namespace Nashet.GameplayView
 		internal void Move()
 		{
 			movementProgress += 1;
-			if (movementProgress > 10)
+			if (movementProgress > 10) //todo here should be cost of traveling instead of 10
 			{
-				movementProgress = 0;
-				var nextPosition = path[0].Position;
-				transform.position = new Vector3(nextPosition.x, nextPosition.y, transform.position.z);
-				path.RemoveAt(0);
-				SetPath(path);
+				ProvinceChangedHandler();
 			}
+		}
+
+		private void ProvinceChangedHandler()
+		{
+			ProvinceId = path[0].Province.Id;
+			movementProgress = 0;
+			var nextPosition = path[0].Position;
+			transform.position = new Vector3(nextPosition.x, nextPosition.y, transform.position.z);
+			path.RemoveAt(0);
+			SetPath(path);
 		}
 	}
 }

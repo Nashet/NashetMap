@@ -20,7 +20,7 @@ namespace Nashet.Map.Examples
 		public readonly HashSet<Border> neughbors = new HashSet<Border>();
 		public Node Node;
 		public Vector3 Position;
-		public int Id;
+		public int Id { get; private set; }
 		public ProvinceMesh provinceMesh;
 		private string name;
 
