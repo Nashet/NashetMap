@@ -700,6 +700,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 6394813091436419427, guid: b79b6588e7b0b864e8f7abcf21bace24, type: 3}
   mapGenerator: {fileID: 400585947}
+  initialPoolSize: 10
 --- !u!1 &1906456239
 GameObject:
   m_ObjectHideFlags: 0

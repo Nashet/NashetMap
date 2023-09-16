@@ -14,9 +14,11 @@ namespace Nashet.GameplayView
 		[SerializeField] private GameObject body;
 
 		private const float enemyDirectionScale = 0.6f;
+		public int ProvinceId { get; private set; }
 
-		internal void Initialize(Vector3 position, Sprite sprite)
+		internal void Initialize(Vector3 position, int provinceID, Sprite sprite)
 		{
+			this.ProvinceId = provinceID;
 			SetFlag(sprite);
 			position.z = -0.1f;
 			gameObject.transform.position = position;
@@ -45,13 +47,19 @@ namespace Nashet.GameplayView
 			return body.GetComponent<Collider>();
 		}
 
-		private void SetMove(List<Node> path)
+		public void SetPath(List<Node> path)
 		{
+			if (path == null || path.Count == 0)
+			{
+				StopMovement();
+				return;
+			}
+
 			pathRenderer.positionCount = path.Count + 1;
 			pathRenderer.SetPositions(GetAdjustedPositions(path));
 			pathRenderer.SetPosition(0, transform.position);
 
-			this.transform.LookAt(path[0].Position, Vector3.back);
+			LookAt(path[0]);
 
 			movementDirection.positionCount = 2;
 			//todo must be fixed size
@@ -61,6 +69,18 @@ namespace Nashet.GameplayView
 			movementDirection.SetPositions(linePositions);
 
 			movementDirection.enabled = true;
+		}
+
+		private void LookAt(Node target)
+		{
+			// Get the direction from the current object to the target object
+			Vector2 direction = target.Position - transform.position;
+
+			// Calculate the angle in degrees
+			float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+			// Apply the rotation around the Z-axis
+			transform.rotation = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
 		}
 
 		private static Vector3[] GetAdjustedPositions(List<Node> path)
@@ -78,7 +98,7 @@ namespace Nashet.GameplayView
 		{
 			pathRenderer.positionCount = 0;
 
-			this.transform.eulerAngles = new Vector3(270f, 0f, 0f);
+			this.transform.eulerAngles = new Vector3(0f, 0f, 0f);
 			movementDirection.enabled = false;
 		}
 	}
