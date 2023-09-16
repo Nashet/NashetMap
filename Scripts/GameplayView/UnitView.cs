@@ -11,6 +11,7 @@ namespace Nashet.GameplayView
 		[SerializeField] private GameObject selectionPart;
 		[SerializeField] private LineRenderer movementDirection;
 		[SerializeField] private LineRenderer pathRenderer;
+		[SerializeField] private GameObject body;
 
 		private const float enemyDirectionScale = 0.6f;
 
@@ -35,6 +36,13 @@ namespace Nashet.GameplayView
 		public void Deselect()
 		{
 			selectionPart.SetActive(false);
+		}
+
+		public bool IsSelected => selectionPart.activeSelf;
+
+		public Collider GetCollider()
+		{
+			return body.GetComponent<Collider>();
 		}
 
 		private void SetMove(List<Node> path)

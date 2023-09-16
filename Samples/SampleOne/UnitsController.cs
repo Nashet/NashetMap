@@ -1,7 +1,10 @@
 ﻿using Nashet.FlagGeneration;
 using Nashet.GameplayView;
 using Nashet.Map.Utils;
+using Nashet.UnitSelection;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Nashet.Map.Examples
@@ -10,14 +13,38 @@ namespace Nashet.Map.Examples
 	{
 		[SerializeField] UnitView unitPrefab;
 		[SerializeField] MapGenerator mapGenerator;
-		private MonoObjectPool<UnitView> unitPool;
+		[SerializeField] private int initialPoolSize = 10;
+
+		private MonoObjectPool<UnitView> unitPool;		
+		private Dictionary<Collider, UnitView> unitsLookup = new();
 
 		private IEnumerator Start()
 		{
 			yield return new WaitUntil(() => mapGenerator.IsReady);
-			unitPool = new MonoObjectPool<UnitView>(unitPrefab, 6);
+			Initialize();
+		}
 
+		private void Initialize()
+		{
+			unitPool = new MonoObjectPool<UnitView>(unitPrefab, initialPoolSize);
+			var selectionComponent = Camera.main.gameObject.GetComponent<SelectionComponent>();
+			selectionComponent.OnEntityClicked += UnitClickedHandler;
 			CreateUnitsForTest();
+		}
+
+		private void UnitClickedHandler(SelectionData data)
+		{
+			if (unitsLookup.TryGetValue(data.SingleSelection, out var unit))
+			{
+				if (unit.IsSelected)
+				{
+					unit.Deselect();
+				}
+				else
+				{
+					unit.Select();
+				}
+			}
 		}
 
 		private void CreateUnitsForTest()
@@ -29,6 +56,7 @@ namespace Nashet.Map.Examples
 				var unit = unitPool.Get();
 				unit.gameObject.transform.SetParent(transform);
 				unit.Initialize(item.Capital.Position, sprite);
+				unitsLookup.Add(unit.GetCollider(), unit);
 			}
 		}
 	}
