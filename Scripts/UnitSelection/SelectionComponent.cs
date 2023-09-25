@@ -6,11 +6,12 @@ using UnityEngine.EventSystems;
 
 namespace Nashet.UnitSelection
 {
-	public delegate void EntityClickedDelegate(SelectionData data);
+	public delegate void EntityClickedDelegate(SelectionData data, int buttonNumber);
 	public class SelectionComponent : MonoBehaviour, ISelectionComponent
 	{
-		public event EntityClickedDelegate OnEntityClicked;
-		public event EntityClickedDelegate OnProvinceClicked;
+		public event EntityClickedDelegate OnEntitySelected;
+		public event EntityClickedDelegate OnMultipleEntitiesSelected;
+
 		/// <summary>
 		/// Can be used to select units
 		/// </summary>
@@ -45,23 +46,26 @@ namespace Nashet.UnitSelection
 
 		private void HandleUnitOrProvinceClick()
 		{
-			if (Input.GetMouseButtonUp(0))
+			if (EventSystem.current.IsPointerOverGameObject())//hovering over UI) 
 			{
-				if (!EventSystem.current.IsPointerOverGameObject())//!hovering over UI) 
-				{
-					var collider = UnitSelectionUtils.getRayCastMeshNumber(camera);
-					if (collider == null)
-					{
-						OnEntityClicked?.Invoke(null);
-						OnProvinceClicked?.Invoke(null);
-					}
-					else
-					{
-						var data = new SelectionData(collider);
+				return;
+			}
 
-						OnProvinceClicked?.Invoke(data);
-						OnEntityClicked?.Invoke(data);
-					}
+			var clickedButton0 = Input.GetMouseButtonUp(0);
+			var clickedButton1 = Input.GetMouseButtonUp(1);
+
+			if (clickedButton0 || clickedButton1)
+			{
+				var actuallyClickedButton = clickedButton0 ? 0 : 1;
+				var collider = UnitSelectionUtils.getRayCastMeshNumber(camera);
+				if (collider == null)
+				{
+					OnEntitySelected?.Invoke(null, actuallyClickedButton);
+				}
+				else
+				{
+					var data = new SelectionData(collider);
+					OnEntitySelected?.Invoke(data, actuallyClickedButton);
 				}
 			}
 		}
@@ -89,8 +93,8 @@ namespace Nashet.UnitSelection
 		private void EndFrameSelection()
 		{
 			if (selectionFrameMousePositionStart != Input.mousePosition)
-			{//todo rename to Onselected
-				OnEntityClicked?.Invoke(new SelectionData(ArmiesGetter(-1).Where(x => IsWithinSelectionBounds(x.transform.position))));
+			{
+				OnMultipleEntitiesSelected?.Invoke(new SelectionData(ArmiesGetter(-1).Where(x => IsWithinSelectionBounds(x.transform.position))), 0);
 			}
 			isFrameSelecting = false;
 		}

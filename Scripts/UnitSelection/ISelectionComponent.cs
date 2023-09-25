@@ -2,7 +2,7 @@
 {
 	public interface ISelectionComponent
 	{
-		event EntityClickedDelegate OnEntityClicked;
-		event EntityClickedDelegate OnProvinceClicked;
+		event EntityClickedDelegate OnEntitySelected;
+		event EntityClickedDelegate OnMultipleEntitiesSelected;
 	}
 }

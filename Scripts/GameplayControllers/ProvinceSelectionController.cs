@@ -24,18 +24,21 @@ namespace Nashet.Map.GameplayControllers
 		private void Start()
 		{
 			selector = GetComponent<SelectionComponent>();
-			selector.OnProvinceClicked += ProvinceClickedHandler;
+			selector.OnEntitySelected += ProvinceClickedHandler;
 			provinceSelector = TimedSelectorWithMaterial.AddTo(gameObject, provinceSelectionMaterial, 0);
 		}
 
 		private void OnDestroy()
 		{
-			selector.OnProvinceClicked -= ProvinceClickedHandler;
+			selector.OnEntitySelected -= ProvinceClickedHandler;
 		}
 
-		private void ProvinceClickedHandler(SelectionData selected)
+		private void ProvinceClickedHandler(SelectionData selected, int buttonNumber)
 		{
 			if (isInSendArmyMode)
+				return;
+
+			if (buttonNumber != 0)
 				return;
 
 			if (selected == null)
