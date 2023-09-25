@@ -68,7 +68,7 @@ namespace Nashet.Map.Examples
 				return;
 			}
 
-			if (data.SingleSelection.gameObject.name == "Body")
+			if (ProvinceMesh.GetIdByCollider(data.SingleSelection) == null)
 				return;
 
 			if (buttonNumber == 0)

@@ -148,7 +148,7 @@ namespace Nashet.MapMeshes
 
 				Mesh mesh = meshCollider.sharedMesh;
 
-				if (mesh.name == "Quad") // here you can filter out non-province meshes
+				if (mesh.name == "Quad") // here you can filter out non-province meshes //todo remove it
 					return null;
 
 				int provinceNumber = Convert.ToInt32(mesh.name);
