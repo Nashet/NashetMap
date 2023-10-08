@@ -41,16 +41,16 @@ namespace Nashet.MapMeshes
 
 			var landMesh = MeshFilter.mesh;
 
-			landMesh.vertices = meshStructure.getVertices().ToArray();
+			landMesh.vertices = meshStructure.getVertices().ToArray(); //make sure memeory is freeded
 			landMesh.triangles = meshStructure.getTriangles().ToArray();
 
 			// next line causes out of memory error in web GL
-			SetUV(landMesh); // dont use getUVmap()
+			landMesh.uv = SetUV(meshStructure.getVertices()); // dont use getUVmap()
 
 			landMesh.RecalculateNormals();
 			landMesh.RecalculateBounds();
 			landMesh.name = ID.ToString();
-			
+
 			Position = SetProvinceCenter(meshStructure);// I can use mesh.bounds.center, but it will center off a little bit
 
 
@@ -69,7 +69,7 @@ namespace Nashet.MapMeshes
 		}
 
 		private void CreateBorderMeshes(Dictionary<int, MeshStructure> neighborBorders, Material defaultBorderMaterial)
-		{			
+		{
 			foreach (var border in neighborBorders)
 			{
 				var neighbor = border.Key;
@@ -86,7 +86,7 @@ namespace Nashet.MapMeshes
 					Mesh borderMesh = MeshFilter.mesh;
 					borderMesh.vertices = border.Value.getVertices().ToArray();
 					borderMesh.triangles = border.Value.getTriangles().ToArray();
-					borderMesh.uv = border.Value.getUVmap().ToArray();
+					borderMesh.uv = border.Value.getUVmap().ToArray(); //todo dont generate UV if not needed
 					borderMesh.RecalculateNormals();
 					borderMesh.RecalculateBounds();
 					meshRenderer.material = defaultBorderMaterial;
@@ -114,23 +114,32 @@ namespace Nashet.MapMeshes
 
 		private static Vector3 SetProvinceCenter(MeshStructure meshStructure)
 		{
-			Vector3 accu = new Vector3(0, 0, 0);
-			foreach (var c in meshStructure.getVertices())
-				accu += c;
-			accu = accu / meshStructure.verticesCount;
-			return accu;
-		}
-
-		private static void SetUV(Mesh landMesh)
-		{
-			Vector2[] uvCoordinates = new Vector2[landMesh.vertices.Length];
-
-			for (int i = 0; i < landMesh.vertices.Length; i++)
+			float x = 0;
+			float y = 0f;
+			float z = 0f;
+			List<Vector3> list = meshStructure.getVertices();
+			for (int i = 0; i < list.Count; i++)
 			{
-				uvCoordinates[i] = new Vector2(landMesh.vertices[i].x, landMesh.vertices[i].y);
+				x += list[i].x;
+				y += list[i].y;
+				z += list[i].z;
 			}
 
-			landMesh.uv = uvCoordinates;
+			var accumulator = new Vector3(x, y, z) / meshStructure.verticesCount;
+			return accumulator;
+		}
+
+		private static Vector2[] SetUV(List<Vector3> vertices)
+		{
+			var uvCoordinates = new Vector2[vertices.Count];
+
+			for (int i = 0; i < vertices.Count; i++)
+			{
+				uvCoordinates[i].x = vertices[i].x;
+				uvCoordinates[i].x = vertices[i].y;
+			}
+
+			return uvCoordinates;
 		}
 
 		public static ProvinceMesh GetById(int id)
