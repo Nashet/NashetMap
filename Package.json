@@ -1,10 +1,8 @@
 {
 	"name": "com.nashet.map",
-	"version": "0.1.2",
-	"displayName": "Vic 2 style map generator",
+	"version": "0.1.3",
+	"displayName": "Victoria 2 style map generator",
 	"description": "Can generate random maps or load map from png file. Includes camera control, patch finder, province name generation, flag generation, map clicks handler and example with rivers and country borders.",
-	"license": "GPL-3.0-only",
-	"licensesUrl": "https://spdx.org/licenses/GPL-3.0-only.html",
 	"dependencies": {},
 	"unity" : "2018.1",
 	"keywords": [

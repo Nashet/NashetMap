@@ -4,7 +4,7 @@ Can generate random maps or load map from png file. Includes camera control, pat
 
 Originally used for https://github.com/Nashet/Prosperity-Wars.
 
-Usage example is in in \Samples\\. It includes river generation, country borders, mountain borders(impassable), camera control, map clicks handler.
+Usage example is in in \Samples\\. It includes river generation, country borders, mountain borders(impassable), camera control, map clicks handler, units movement.
 
 Another example is https://github.com/Nashet/MapNECS.git.
 

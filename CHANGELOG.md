@@ -15,3 +15,10 @@
 ### Added
 
 - province can suport any materials, for example, stripes material
+
+## [0.1.3] - 2023-09-25
+
+### Added
+
+- added units in example. Units can use path finding.
+- added minor changes in SelectionComponent
